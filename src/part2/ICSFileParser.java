@@ -40,17 +40,14 @@ public class ICSFileParser {
 	}
 	
 	public String getDtstart(){
-		System.out.println(dtstart);
 		return dtstart;
 	}
 	
 	public String getDtend(){
-		System.out.println(dtend);
 		return dtend;
 	}
 	
 	public String getTzid(){
-		System.out.println(tzid);
 		return tzid;
 	}
 	
