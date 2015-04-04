@@ -1,10 +1,13 @@
-package part1;
+package part2;
 
 import static org.junit.Assert.*;
 
 import java.util.TimeZone;
 
 import org.junit.Test;
+
+//import part1.FreeTimeGenerator;
+//import part1.icsEvent;
 
 public class icsEventTest {
 
@@ -63,11 +66,11 @@ public class icsEventTest {
 		
 		// Testing free time constructor
 		FreeTimeGenerator free = new FreeTimeGenerator();
-		assertEquals(0, free.eventList.size());
-		assertTrue(free.eventList.isEmpty());
-		free.eventList.add(test);
-		assertEquals(1, free.eventList.size());
-		assertFalse(free.eventList.isEmpty());
+		assertEquals(0, free.getEventList().size());
+		assertTrue(free.getEventList().isEmpty());
+		free.getEventList().add(test);
+		assertEquals(1, free.getEventList().size());
+		assertFalse(free.getEventList().isEmpty());
 		
 		// Testing free time readFile method
 		icsEvent read = free.readIcs("studyfinal.ics");
