@@ -6,9 +6,6 @@ import java.util.TimeZone;
 
 import org.junit.Test;
 
-//import part1.FreeTimeGenerator;
-//import part1.icsEvent;
-
 public class icsEventTest {
 
 	@Test
@@ -56,38 +53,64 @@ public class icsEventTest {
 		assertEquals(true, test.writeIcsFile(test, "test.ics"));
 		
 		// Testing the constructor with presets here
-		icsEvent party = new icsEvent("Party", "School", "PUBLIC", "0", "20150322T1200000", "20150322T160000");
-		assertEquals("Party", party.getSummary());
-		assertEquals("School", party.getLocation());
-		assertEquals("PUBLIC", party.getClassification());
-		assertEquals("0", party.getPriority());
-		assertEquals("20150322T1200000", party.getDtstart());
-		assertEquals("20150322T160000", party.getDtend());
+		icsEvent party = new icsEvent("SUMMARY:Party", "LOCATION:School", "CLASSIFICATION:PUBLIC",
+				"PRIORITY:0", "DTSTART:20150515T143000", "DTEND:20150515T233000");
+		assertEquals("SUMMARY:Party", party.getSummary());
+		assertEquals("LOCATION:School", party.getLocation());
+		assertEquals("CLASSIFICATION:PUBLIC", party.getClassification());
+		assertEquals("PRIORITY:0", party.getPriority());
+		assertEquals("DTSTART:20150515T143000", party.getDtstart());
+		assertEquals("DTEND:20150515T233000", party.getDtend());
+		
+		icsEvent otherParty = new icsEvent("SUMMARY:Party", "LOCATION:Someone's House", "CLASSIFICATION:PRIVATE",
+				"PRIORITY:7", "DTSTART:20150515T163000", "DTEND:20150515T235900");
+		assertEquals("SUMMARY:Party", otherParty.getSummary());
+		assertEquals("LOCATION:Someone's House", otherParty.getLocation());
+		assertEquals("CLASSIFICATION:PRIVATE", otherParty.getClassification());
+		assertEquals("PRIORITY:7", otherParty.getPriority());
+		assertEquals("DTSTART:20150515T163000", otherParty.getDtstart());
+		assertEquals("DTEND:20150515T235900", otherParty.getDtend());
 		
 		// Testing free time constructor
 		FreeTimeGenerator free = new FreeTimeGenerator();
 		assertEquals(0, free.getEventList().size());
 		assertTrue(free.getEventList().isEmpty());
-		free.getEventList().add(test);
-		assertEquals(1, free.getEventList().size());
-		assertFalse(free.getEventList().isEmpty());
+		//free.getEventList().add(test);
+		//assertEquals(1, free.getEventList().size());
+		//assertFalse(free.getEventList().isEmpty());
 		
 		// Testing free time readFile method
-		icsEvent read = free.readIcs("studyfinal.ics");
-		assertEquals("BEGIN:VCALENDAR", read.getCalBeginTag());
-		assertEquals("VERSION:2.0", read.getVersion());
-		assertEquals("BEGIN:VEVENT", read.getEventBeginTag());
-		assertEquals("SUMMARY:Studying for finals", read.getSummary());
-		assertEquals("LOCATION:Hamilton Library", read.getLocation());
-		assertEquals("CLASSIFICATION:PUBLIC", read.getClassification());
-		assertEquals("PRIORITY:1", read.getPriority());
-		assertEquals("DTSTART:20150508T180000", read.getDtstart());
-		assertEquals("DTEND:20150508T220000", read.getDtend());
-		assertEquals("END:VEVENT", read.getEventEndTag());
-		assertEquals("BEGIN:VTIMEZONE", read.getTzBeginTag());
-		assertEquals("TZID:Pacific/Honolulu", read.getTzid());
-		assertEquals("END:VTIMEZONE", read.getTzEndTag());
-		assertEquals("END:VCALENDAR", read.getCalEndTag());
+		icsEvent study = free.readIcs("studyfinal.ics");
+		assertEquals("BEGIN:VCALENDAR", study.getCalBeginTag());
+		assertEquals("VERSION:2.0", study.getVersion());
+		assertEquals("BEGIN:VEVENT", study.getEventBeginTag());
+		assertEquals("SUMMARY:Studying for finals", study.getSummary());
+		assertEquals("LOCATION:Hamilton Library", study.getLocation());
+		assertEquals("CLASSIFICATION:PUBLIC", study.getClassification());
+		assertEquals("PRIORITY:1", study.getPriority());
+		assertEquals("DTSTART:20150508T180000", study.getDtstart());
+		assertEquals("DTEND:20150508T220000", study.getDtend());
+		assertEquals("END:VEVENT", study.getEventEndTag());
+		assertEquals("BEGIN:VTIMEZONE", study.getTzBeginTag());
+		assertEquals("TZID:Pacific/Honolulu", study.getTzid());
+		assertEquals("END:VTIMEZONE", study.getTzEndTag());
+		assertEquals("END:VCALENDAR", study.getCalEndTag());
+		
+		// Testing new methods
+		FreeTimeGenerator example = new FreeTimeGenerator();
+		example.addIcsEvent(party); // Refer to lines 55~62
+		assertEquals(1, example.getEventList().size());
+		assertFalse(example.getEventList().isEmpty());
+		assertEquals(14, example.getDtstartHour(party));
+		assertEquals("20150515", example.getDtstartDate(party));
+		assertEquals(30, example.getDtstartMinute(party));
+		assertEquals(23, example.getDtendHour(party));
+		assertEquals("20150515", example.getDtendDate(party));
+		assertEquals(30, example.getDtendMinute(party));
+		assertEquals(true, example.compareDate(party, otherParty));
+		assertEquals(true, example.compareTime(party, otherParty));
+		assertEquals(false, example.compareDate(study, party));
+		assertEquals(false, example.compareTime(otherParty, party));	
 	}
 
 }
